@@ -1,0 +1,9 @@
+[package]
+name = "aise-gui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aise-core = { path = "../aise-core" }
+eframe = "0.27.2"
+rfd = "0.14.1"

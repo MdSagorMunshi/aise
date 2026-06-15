@@ -1,0 +1,18 @@
+[workspace]
+members = [
+    "crates/aise-core",
+    "crates/aise-cli",
+    "crates/aise-tests",
+    "crates/aise-bench",
+    "crates/aise-gui"
+]
+resolver = "2"
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
