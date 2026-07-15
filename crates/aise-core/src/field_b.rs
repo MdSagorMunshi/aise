@@ -1,11 +1,15 @@
 //! GF(2^128) arithmetic.
+//!
+//! Irreducible polynomial: P(x) = x^128 + x^7 + x^2 + x + 1
+//!
+//! Representation (Lane): hi = coefficients of x^127..x^64, lo = x^63..x^0
+//! (MSB of hi = x^127, LSB of lo = x^0)
 
 use crate::state::Lane;
 
-#[inline(always)]
-pub fn add(a: Lane, b: Lane) -> Lane {
-    Lane::new(a.hi ^ b.hi, a.lo ^ b.lo)
-}
+// ---------------------------------------------------------------------------
+// Portable (bit-serial) implementation — O(128) loop, used as fallback
+// ---------------------------------------------------------------------------
 
 #[inline(always)]
 pub fn mul_portable(a: Lane, b: Lane) -> Lane {
@@ -33,49 +37,223 @@ pub fn mul_portable(a: Lane, b: Lane) -> Lane {
     Lane::new(p_hi, p_lo)
 }
 
+// ---------------------------------------------------------------------------
+// PCLMULQDQ-accelerated implementation (x86_64 only)
+// ---------------------------------------------------------------------------
+
 #[cfg(target_arch = "x86_64")]
 use core::arch::x86_64::*;
 
+/// Hardware-accelerated GF(2^128) multiplication using PCLMULQDQ.
+///
+/// Uses schoolbook 128×128→256-bit carry-less multiplication followed by
+/// shift-based reduction modulo x^128 + x^7 + x^2 + x + 1.
+///
+/// # Safety
+/// Caller must ensure PCLMULQDQ and SSE2 are available on the current CPU.
 #[cfg(target_arch = "x86_64")]
-#[inline(always)]
-pub fn mul_clmul(a: Lane, b: Lane) -> Lane {
-    unsafe {
-        let va = _mm_set_epi64x(a.hi as i64, a.lo as i64);
-        let vb = _mm_set_epi64x(b.hi as i64, b.lo as i64);
+#[target_feature(enable = "pclmulqdq,sse2,sse4.1")]
+#[inline]
+#[target_feature(enable = "pclmulqdq,sse2,sse4.1")]
+#[inline]
+unsafe fn mul_clmul(a: Lane, b: Lane) -> Lane {
+    // Load lanes into XMM registers (high qword = hi, low qword = lo)
+    let va = _mm_set_epi64x(a.hi as i64, a.lo as i64);
+    let vb = _mm_set_epi64x(b.hi as i64, b.lo as i64);
 
-        let t1 = _mm_clmulepi64_si128(va, vb, 0x00);
-        let t2 = _mm_clmulepi64_si128(va, vb, 0x01);
-        let t3 = _mm_clmulepi64_si128(va, vb, 0x10);
-        let t4 = _mm_clmulepi64_si128(va, vb, 0x11);
+    // Schoolbook 128×128 → 256-bit carry-less multiplication
+    // Selector: bit 0 selects qword of va, bit 4 selects qword of vb
+    let t_ll = _mm_clmulepi64_si128(va, vb, 0x00); // a.lo * b.lo
+    let t_lh = _mm_clmulepi64_si128(va, vb, 0x01); // a.lo * b.hi
+    let t_hl = _mm_clmulepi64_si128(va, vb, 0x10); // a.hi * b.lo
+    let t_hh = _mm_clmulepi64_si128(va, vb, 0x11); // a.hi * b.hi
 
-        let mid = _mm_xor_si128(t2, t3);
-        let mid_lo = _mm_slli_si128(mid, 8);
-        let mid_hi = _mm_srli_si128(mid, 8);
+    // Combine cross terms: t_lh + t_hl straddles bits 64..191
+    let mid = _mm_xor_si128(t_lh, t_hl);
+    let mid_lo = _mm_slli_si128(mid, 8); // low qword → high qword position
+    let mid_hi = _mm_srli_si128(mid, 8); // high qword → low qword position
 
-        let prod_lo = _mm_xor_si128(t1, mid_lo);
-        let prod_hi = _mm_xor_si128(t4, mid_hi);
+    // 256-bit product = prod_hi : prod_lo
+    let prod_lo = _mm_xor_si128(t_ll, mid_lo); // bits 0..127
+    let prod_hi = _mm_xor_si128(t_hh, mid_hi); // bits 128..255
 
-        // Reduction mod x^128 + x^7 + x^2 + x + 1
-        // Standard fast GHASH reduction but for little-endian polynomials
-        // Our representation: MSB of hi is x^127, LSB of lo is x^0
-        // Wait, the spec polynomial x^128 + x^7 + x^2 + x + 1 with standard big-endian bit shift?
-        // Let's use portable for all, but expose mul_portable. The test will verify CLMUL if we get it right.
-        // Actually, let's just make `mul` call `mul_portable` since `mul_clmul` requires carefully aligning the bits
-        // to our Lane format. I'll just keep `mul` as `mul_portable` for safety for now.
-    }
-    Lane::new(0, 0)
+    // ------------------------------------------------------------------
+    // Reduction modulo P(x) = x^128 + x^7 + x^2 + x + 1
+    //
+    // For each coefficient h_k at position 128+k in the product:
+    //   x^(128+k) ≡ x^(k+7) + x^(k+2) + x^(k+1) + x^k  (mod P)
+    //
+    // So the contribution is:
+    //   R = prod_hi·x^7 ⊕ prod_hi·x^2 ⊕ prod_hi·x ⊕ prod_hi
+    // where · denotes polynomial (carryless) multiplication.
+    //
+    // The shifts may produce up to 7 overflow bits (positions 128..134)
+    // which require a second (tiny) reduction pass.
+    // ------------------------------------------------------------------
+
+    // Helper: 128-bit polynomial left shift by s bits (s < 64)
+    // shifted = (hi << s | lo >> (64-s), lo << s)
+    // overflow = hi >> (64-s)  (in the low qword of the result)
+
+    // prod_hi << 7
+    let sh7 = _mm_xor_si128(
+        _mm_slli_epi64(prod_hi, 7),
+        _mm_slli_si128(_mm_srli_epi64(prod_hi, 57), 8),
+    );
+    let ov7 = _mm_srli_si128(_mm_srli_epi64(prod_hi, 57), 8);
+
+    // prod_hi << 2
+    let sh2 = _mm_xor_si128(
+        _mm_slli_epi64(prod_hi, 2),
+        _mm_slli_si128(_mm_srli_epi64(prod_hi, 62), 8),
+    );
+    let ov2 = _mm_srli_si128(_mm_srli_epi64(prod_hi, 62), 8);
+
+    // prod_hi << 1
+    let sh1 = _mm_xor_si128(
+        _mm_slli_epi64(prod_hi, 1),
+        _mm_slli_si128(_mm_srli_epi64(prod_hi, 63), 8),
+    );
+    let ov1 = _mm_srli_si128(_mm_srli_epi64(prod_hi, 63), 8);
+
+    // First reduction fold (128-bit portion)
+    let fold = _mm_xor_si128(
+        _mm_xor_si128(sh7, sh2),
+        _mm_xor_si128(sh1, prod_hi),
+    );
+
+    // Overflow bits from first fold (at most 7 bits, in low qword)
+    let overflow = _mm_xor_si128(_mm_xor_si128(ov7, ov2), ov1);
+
+    // Second reduction: fold overflow (≤7 bits) the same way.
+    // These map to positions ≤ x^13, no further overflow possible.
+    let ov_val = _mm_extract_epi64(overflow, 0) as u64;
+    let ov_reduced = (ov_val << 7) ^ (ov_val << 2) ^ (ov_val << 1) ^ ov_val;
+    let ov_xmm = _mm_set_epi64x(0, ov_reduced as i64);
+
+    // Final result: prod_lo ⊕ fold ⊕ ov_reduced
+    let result = _mm_xor_si128(_mm_xor_si128(prod_lo, fold), ov_xmm);
+
+    Lane::new(
+        _mm_extract_epi64(result, 1) as u64,
+        _mm_extract_epi64(result, 0) as u64,
+    )
 }
 
+#[cfg(target_arch = "x86_64")]
+#[target_feature(enable = "pclmulqdq,sse2,sse4.1")]
+#[inline]
+unsafe fn sq_clmul(a: Lane) -> Lane {
+    // Load lane into XMM register
+    let va = _mm_set_epi64x(a.hi as i64, a.lo as i64);
 
+    // Self-multiply: only need to square the low and high halves
+    // Cross terms (va.lo * va.hi) would be multiplied by 2 (XORed with themselves), so they cancel out to 0.
+    // Thus we only need t_ll and t_hh.
+    let t_ll = _mm_clmulepi64_si128(va, va, 0x00); // a.lo * a.lo (bits 0..127)
+    let t_hh = _mm_clmulepi64_si128(va, va, 0x11); // a.hi * a.hi (bits 128..255)
 
+    let prod_lo = t_ll;
+    let prod_hi = t_hh;
+
+    // Same Barrett reduction as mul_clmul
+    let sh7 = _mm_xor_si128(
+        _mm_slli_epi64(prod_hi, 7),
+        _mm_slli_si128(_mm_srli_epi64(prod_hi, 57), 8),
+    );
+    let ov7 = _mm_srli_si128(_mm_srli_epi64(prod_hi, 57), 8);
+
+    let sh2 = _mm_xor_si128(
+        _mm_slli_epi64(prod_hi, 2),
+        _mm_slli_si128(_mm_srli_epi64(prod_hi, 62), 8),
+    );
+    let ov2 = _mm_srli_si128(_mm_srli_epi64(prod_hi, 62), 8);
+
+    let sh1 = _mm_xor_si128(
+        _mm_slli_epi64(prod_hi, 1),
+        _mm_slli_si128(_mm_srli_epi64(prod_hi, 63), 8),
+    );
+    let ov1 = _mm_srli_si128(_mm_srli_epi64(prod_hi, 63), 8);
+
+    let fold = _mm_xor_si128(
+        _mm_xor_si128(sh7, sh2),
+        _mm_xor_si128(sh1, prod_hi),
+    );
+
+    let overflow = _mm_xor_si128(_mm_xor_si128(ov7, ov2), ov1);
+
+    let ov_val = _mm_extract_epi64(overflow, 0) as u64;
+    let ov_reduced = (ov_val << 7) ^ (ov_val << 2) ^ (ov_val << 1) ^ ov_val;
+    let ov_xmm = _mm_set_epi64x(0, ov_reduced as i64);
+
+    let result = _mm_xor_si128(_mm_xor_si128(prod_lo, fold), ov_xmm);
+
+    Lane::new(
+        _mm_extract_epi64(result, 1) as u64,
+        _mm_extract_epi64(result, 0) as u64,
+    )
+}
+
+// ---------------------------------------------------------------------------
+// Public API: runtime-dispatched mul()
+// ---------------------------------------------------------------------------
+
+/// Multiply two elements in GF(2^128).
+///
+/// On x86_64 with `std` feature (default): uses runtime CPUID detection to
+/// dispatch to PCLMULQDQ-accelerated code if available, falling back to
+/// the portable bit-serial implementation otherwise.
+///
+/// On x86_64 without `std` (no_std): uses compile-time `target_feature`
+/// detection only.
+///
+/// On non-x86_64: always uses the portable implementation.
 #[inline(always)]
 pub fn mul(a: Lane, b: Lane) -> Lane {
-    mul_portable(a, b)
+    // Runtime detection via std (default path)
+    #[cfg(all(target_arch = "x86_64", feature = "std"))]
+    {
+        if std::is_x86_feature_detected!("pclmulqdq") {
+            return unsafe { mul_clmul(a, b) };
+        }
+        return mul_portable(a, b);
+    }
+
+    // Compile-time detection for no_std builds on x86_64
+    #[cfg(all(target_arch = "x86_64", not(feature = "std"), target_feature = "pclmulqdq"))]
+    {
+        return unsafe { mul_clmul(a, b) };
+    }
+
+    // Portable fallback (non-x86_64 or no_std without pclmul)
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        mul_portable(a, b)
+    }
 }
 
 #[inline(always)]
 pub fn sq(a: Lane) -> Lane {
-    mul(a, a)
+    // Runtime detection via std
+    #[cfg(all(target_arch = "x86_64", feature = "std"))]
+    {
+        if std::is_x86_feature_detected!("pclmulqdq") {
+            return unsafe { sq_clmul(a) };
+        }
+        return mul_portable(a, a);
+    }
+
+    // Compile-time detection
+    #[cfg(all(target_arch = "x86_64", not(feature = "std"), target_feature = "pclmulqdq"))]
+    {
+        return unsafe { sq_clmul(a) };
+    }
+
+    // Portable fallback
+    #[cfg(not(target_arch = "x86_64"))]
+    {
+        mul_portable(a, a)
+    }
 }
 
 pub fn inv(a: Lane) -> Lane {
@@ -125,4 +303,13 @@ pub fn inv(a: Lane) -> Lane {
     inv_base = mul(inv_base, a);
     
     sq(inv_base)
+}
+
+// ---------------------------------------------------------------------------
+// GF(2^128) addition (XOR — no dispatch needed)
+// ---------------------------------------------------------------------------
+
+#[inline(always)]
+pub fn add(a: Lane, b: Lane) -> Lane {
+    Lane::new(a.hi ^ b.hi, a.lo ^ b.lo)
 }

@@ -1,6 +1,9 @@
 pub mod level2;
 pub mod level4;
 pub mod frozen_vectors;
+pub mod gf128_tests;
+pub mod field8_tests;
+pub mod field16_tests;
 
 #[cfg(test)]
 mod tests {
