@@ -1,5 +1,6 @@
 pub mod level2;
 pub mod level4;
+pub mod frozen_vectors;
 
 #[cfg(test)]
 mod tests {
