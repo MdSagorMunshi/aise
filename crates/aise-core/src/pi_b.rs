@@ -7,6 +7,18 @@ use crate::mds_b;
 
 pub fn pi_b(lanes: &mut [Lane; 128]) {
     for r in 0..32 {
+        #[cfg(target_arch = "x86_64")]
+        {
+            if std::is_x86_feature_detected!("avx512f") 
+                && std::is_x86_feature_detected!("vpclmulqdq") 
+                && std::is_x86_feature_detected!("avx512bw") 
+                && std::is_x86_feature_detected!("avx512dq") 
+            {
+                unsafe { crate::field_b_avx512::pi_b_round_avx512(lanes, r); }
+                continue;
+            }
+        }
+        
         sbox_b::batch_apply(lanes);
 
         mds_b::mix_lanes(lanes);

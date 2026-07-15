@@ -1,4 +1,4 @@
-#![allow(unused)]
+#![allow(unused, unsafe_op_in_unsafe_fn)]
 use std::arch::x86_64::*;
 use aise_core::state::{Lane, State};
 use aise_core::pi_b;
@@ -239,4 +239,122 @@ unsafe fn swap_halves(v: __m512i) -> __m512i {
         assert_eq!(actual_batch.lanes[i], state1.lanes[i], "Mismatch at v_batch_inv index {}", i);
     }
     println!("AVX-512 Batch Inv perfectly matches scalar!");
+
+    test_edge_cases();
+    test_fuzz_pi_b();
+    test_frozen_vector();
+    test_avalanche();
+}
+
+fn rand_u64(state: &mut u64) -> u64 {
+    *state ^= *state << 13;
+    *state ^= *state >> 7;
+    *state ^= *state << 17;
+    *state
+}
+
+fn test_fuzz_pi_b() {
+    println!("Fuzzing Full Pi_B AVX-512 Fused Round vs Scalar (10,000 iterations)...");
+    let iters = 10_000;
+    let mut rand_state = 0x123456789ABCDEF0u64;
+    
+    for iter in 0..iters {
+        let mut f_avx = [Lane::new(0, 0); 128];
+        let mut f_scl = [Lane::new(0, 0); 128];
+        for i in 0..128 {
+            let l = Lane::new(rand_u64(&mut rand_state), rand_u64(&mut rand_state));
+            f_avx[i] = l;
+            f_scl[i] = l;
+        }
+        
+        // Full 32-round AVX-512 Pi_B
+        aise_core::pi_b::pi_b(&mut f_avx);
+        
+        // Full 32-round Scalar Pi_B
+        for r in 0..32 {
+            for i in 0..128 { f_scl[i] = aise_core::sbox_b::apply(f_scl[i]); }
+            aise_core::mds_b::mix_lanes(&mut f_scl);
+            
+            let mut next = [Lane::new(0,0); 128];
+            for i in 0..128 { next[i] = f_scl[aise_core::constants::SIGMA_B[i]]; }
+            for i in 0..128 {
+                next[i].hi ^= aise_core::constants::RC_B[r][i].0;
+                next[i].lo ^= aise_core::constants::RC_B[r][i].1;
+            }
+            f_scl = next;
+        }
+        
+        for i in 0..128 {
+            assert_eq!(f_scl[i], f_avx[i], "Mismatch at iteration {}, index {}", iter, i);
+        }
+    }
+    println!("Pi_B AVX-512 Fuzz: PASSED");
+}
+
+fn test_edge_cases() {
+    println!("Testing Pi_B Edge Cases...");
+    let cases = vec![
+        Lane::new(0, 0),
+        Lane::new(u64::MAX, u64::MAX),
+        Lane::new(0x00000000000000FF, 0),
+        Lane::new(0, 0xFF00000000000000),
+    ];
+    
+    for &case in &cases {
+        let mut f_avx = [case; 128];
+        let mut f_scl = [case; 128];
+        
+        aise_core::pi_b::pi_b(&mut f_avx);
+        
+        for r in 0..32 {
+            for i in 0..128 { f_scl[i] = aise_core::sbox_b::apply(f_scl[i]); }
+            aise_core::mds_b::mix_lanes(&mut f_scl);
+            let mut next = [Lane::new(0,0); 128];
+            for i in 0..128 { next[i] = f_scl[aise_core::constants::SIGMA_B[i]]; }
+            for i in 0..128 {
+                next[i].hi ^= aise_core::constants::RC_B[r][i].0;
+                next[i].lo ^= aise_core::constants::RC_B[r][i].1;
+            }
+            f_scl = next;
+        }
+        
+        for i in 0..128 {
+            assert_eq!(f_scl[i], f_avx[i], "Edge case mismatch at index {} for case {:?}", i, case);
+        }
+    }
+    println!("Pi_B Edge Cases: PASSED");
+}
+
+fn test_frozen_vector() {
+    println!("Testing Pi_B Frozen Vector...");
+    let mut f_avx = [Lane::new(0, 0); 128];
+    for i in 0..128 {
+        f_avx[i] = Lane::new(i as u64, (127 - i) as u64);
+    }
+    aise_core::pi_b::pi_b(&mut f_avx);
+    
+    let mut sum_hi = 0u64;
+    let mut sum_lo = 0u64;
+    for i in 0..128 {
+        sum_hi ^= f_avx[i].hi;
+        sum_lo ^= f_avx[i].lo;
+    }
+    println!("Frozen Vector XOR Sum: {:016x} {:016x}", sum_hi, sum_lo);
+}
+
+fn test_avalanche() {
+    println!("Testing Pi_B Avalanche...");
+    let mut f_base = [Lane::new(0, 0); 128];
+    let mut f_flip = [Lane::new(0, 0); 128];
+    f_flip[0].hi = 1; // Flip 1 bit
+    
+    aise_core::pi_b::pi_b(&mut f_base);
+    aise_core::pi_b::pi_b(&mut f_flip);
+    
+    let mut diff_bits = 0;
+    for i in 0..128 {
+        diff_bits += (f_base[i].hi ^ f_flip[i].hi).count_ones();
+        diff_bits += (f_base[i].lo ^ f_flip[i].lo).count_ones();
+    }
+    println!("Avalanche bit flips: {} / 16384 ({:.2}%)", diff_bits, 100.0 * diff_bits as f64 / 16384.0);
 }
