@@ -351,4 +351,104 @@ fn test_edge_cases() {
 fn main() {
     test_mds();
     test_edge_cases();
+    test_fused_round();
+    test_fused_round_edge_cases();
+}
+
+/// Scalar reference for one Pi_C internal round (S-box + MDS + SIGMA_C + Affine).
+/// This replicates the exact logic from pi_c.rs's scalar fallback path.
+fn scalar_pi_c_single_round(f: &mut [u128; 128], r: usize) {
+    use aise_core::field_p;
+
+    // S-box
+    if r % 2 == 1 {
+        for i in 0..128 { f[i] = field_p::pow5(f[i]); }
+    } else {
+        for i in 0..128 { f[i] = field_p::powd(f[i]); }
+    }
+
+    // MDS
+    aise_core::mds_c::mix_lanes(f);
+
+    // SIGMA_C + Affine
+    let mut next = [0u128; 128];
+    for i in 0..128 {
+        next[i] = f[SIGMA_C[i]];
+    }
+    for i in 0..128 {
+        let rc = ((RC_C[r][i].0 as u128) << 64) | (RC_C[r][i].1 as u128);
+        next[i] = field_p::add(next[i], rc);
+    }
+    *f = next;
+}
+
+/// Phase 3: Fused round test — pi_c_round_avx512 vs scalar single-round reference.
+/// Tests all 32 round indices across 10,000 random inputs.
+fn test_fused_round() {
+    let mut rng = XorShift::new(98765);
+    let mut total_tests = 0u64;
+
+    for iter in 0..10_000 {
+        // Use a different round index each iteration (cycle through all 32)
+        let r = iter % 32;
+
+        let mut f = [0u128; 128];
+        let mut f_ref = [0u128; 128];
+        for i in 0..128 {
+            let val = rng.next_u128() & 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+            f[i] = val;
+            f_ref[i] = val;
+        }
+
+        // Scalar reference
+        scalar_pi_c_single_round(&mut f_ref, r);
+
+        // AVX-512 fused round
+        unsafe {
+            aise_core::field_p_avx512::pi_c_round_avx512(&mut f, r);
+        }
+
+        for i in 0..128 {
+            assert_eq!(f[i], f_ref[i],
+                "Fused round mismatch at iter={}, round={}, index={}: avx=0x{:032x} scalar=0x{:032x}",
+                iter, r, i, f[i], f_ref[i]);
+        }
+        total_tests += 128;
+    }
+    println!("Fused round test passed 10,000 iterations ({} element comparisons) across all 32 round indices!", total_tests);
+}
+
+/// Phase 3: Fused round edge-case test — deterministic boundary values across all 32 round indices.
+fn test_fused_round_edge_cases() {
+    let edge_values: Vec<u128> = vec![
+        0u128,                  // All zeros
+        1u128,                  // One
+        (1u128 << 127) - 2,    // p - 1
+        (1u128 << 127) - 1,    // p (field boundary)
+        (1u128 << 52) - 1,     // Limb 0 max
+        (1u128 << 52),         // Limb 1 min
+        (1u128 << 104) - 1,    // Limb 0+1 max
+        (1u128 << 104),        // Limb 2 min
+    ];
+
+    for r in 0..32 {
+        for &val in &edge_values {
+            let mut f = [val; 128];
+            let mut f_ref = [val; 128];
+
+            scalar_pi_c_single_round(&mut f_ref, r);
+
+            unsafe {
+                aise_core::field_p_avx512::pi_c_round_avx512(&mut f, r);
+            }
+
+            for i in 0..128 {
+                assert_eq!(f[i], f_ref[i],
+                    "Fused round edge-case mismatch at round={}, val=0x{:032x}, index={}: avx=0x{:032x} scalar=0x{:032x}",
+                    r, val, i, f[i], f_ref[i]);
+            }
+        }
+    }
+    println!("Fused round edge-case test passed all {} test vectors across all 32 round indices!",
+        32 * edge_values.len());
 }

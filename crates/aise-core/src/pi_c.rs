@@ -1,27 +1,24 @@
 //! Permutation C (Pi_C)
 
 use crate::constants::{RC_C, SIGMA_C};
-use crate::sbox_c;
 use crate::mds_c;
 use crate::field_p;
 
 pub fn pi_c(f: &mut [u128; 128]) {
     for r in 0..32 {
+        #[cfg(target_arch = "x86_64")]
+        {
+            if std::is_x86_feature_detected!("avx512ifma") {
+                unsafe { crate::field_p_avx512::pi_c_round_avx512(f, r); }
+                continue;
+            }
+        }
+
+        // Scalar fallback
         if r % 2 == 1 {
             for i in 0..128 { f[i] = field_p::pow5(f[i]); }
         } else {
-            #[cfg(target_arch = "x86_64")]
-            {
-                if std::is_x86_feature_detected!("avx512ifma") {
-                    unsafe { crate::field_p_avx512::batch_powd_avx512(f); }
-                } else {
-                    for i in 0..128 { f[i] = field_p::powd(f[i]); }
-                }
-            }
-            #[cfg(not(target_arch = "x86_64"))]
-            {
-                for i in 0..128 { f[i] = field_p::powd(f[i]); }
-            }
+            for i in 0..128 { f[i] = field_p::powd(f[i]); }
         }
 
         mds_c::mix_lanes(f);
