@@ -14,6 +14,7 @@ impl Lane {
 }
 
 #[derive(Clone, Copy, Debug)]
+#[repr(C, align(64))]
 pub struct State {
     pub lanes: [Lane; 128],
 }

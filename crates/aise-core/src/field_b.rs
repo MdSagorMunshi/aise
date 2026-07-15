@@ -305,10 +305,31 @@ pub fn inv(a: Lane) -> Lane {
     sq(inv_base)
 }
 
+use crate::field_b_avx512;
+
 /// Montgomery Batch Inversion for 128 elements in GF(2^128).
 /// Inverts the slice in-place. Uses branchless masking for zero-handling.
 #[inline]
 pub fn batch_inv(lanes: &mut [Lane; 128]) {
+    #[cfg(all(target_arch = "x86_64", feature = "std"))]
+    {
+        if std::is_x86_feature_detected!("avx512f") 
+            && std::is_x86_feature_detected!("vpclmulqdq") 
+            && std::is_x86_feature_detected!("avx512bw") 
+            && std::is_x86_feature_detected!("avx512dq") 
+        {
+            unsafe {
+                static mut PRINTED: bool = false;
+                if !PRINTED {
+                    println!("--- AVX-512 BATCH INV IS ACTIVE ---");
+                    PRINTED = true;
+                }
+                field_b_avx512::batch_inv_avx512(lanes);
+                return;
+            }
+        }
+    }
+
     let mut masks = [0u64; 128];
     let mut c = [Lane::new(0, 0); 128];
     

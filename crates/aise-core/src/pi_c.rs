@@ -7,8 +7,21 @@ use crate::field_p;
 
 pub fn pi_c(f: &mut [u128; 128]) {
     for r in 0..32 {
-        for i in 0..128 {
-            f[i] = sbox_c::apply(f[i], r);
+        if r % 2 == 1 {
+            for i in 0..128 { f[i] = field_p::pow5(f[i]); }
+        } else {
+            #[cfg(target_arch = "x86_64")]
+            {
+                if std::is_x86_feature_detected!("avx512ifma") {
+                    unsafe { crate::field_p_avx512::batch_powd_avx512(f); }
+                } else {
+                    for i in 0..128 { f[i] = field_p::powd(f[i]); }
+                }
+            }
+            #[cfg(not(target_arch = "x86_64"))]
+            {
+                for i in 0..128 { f[i] = field_p::powd(f[i]); }
+            }
         }
 
         mds_c::mix_lanes(f);
@@ -17,12 +30,10 @@ pub fn pi_c(f: &mut [u128; 128]) {
         for i in 0..128 {
             next[i] = f[SIGMA_C[i]];
         }
-
         for i in 0..128 {
             let rc = ((RC_C[r][i].0 as u128) << 64) | (RC_C[r][i].1 as u128);
             next[i] = field_p::add(next[i], rc);
         }
-
         *f = next;
     }
 }

@@ -5,10 +5,12 @@ extern crate alloc;
 
 pub mod state;
 pub mod constants;
+pub mod field_b_avx512;
 pub mod field8;
 pub mod field16;
 pub mod field_b;
 pub mod field_p;
+pub mod field_p_avx512;
 pub mod sbox_b;
 pub mod sbox_c;
 pub mod mds_b;

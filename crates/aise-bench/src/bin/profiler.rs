@@ -36,15 +36,17 @@ fn main() {
     println!("mul_clmul: {:.2} cycles/call", (end_mul - start_mul) as f64 / iters as f64);
     println!("sq_clmul: {:.2} cycles/call", (end_sq - start_sq) as f64 / iters as f64);
 
-    // 2. Measure inv() cycles
+    // 3. Measure batch_inv cycles
+    let mut batch_lanes = [Lane::new(1, 2); 128];
     let start_inv = unsafe { _rdtsc() };
     for _ in 0..iters {
-        a = field_b::inv(a);
+        field_b::batch_inv(&mut batch_lanes);
     }
     let end_inv = unsafe { _rdtsc() };
-    std::hint::black_box(a);
+    std::hint::black_box(batch_lanes);
     
-    println!("inv: {:.2} cycles/call", (end_inv - start_inv) as f64 / iters as f64);
+    let batch_inv_cycles = (end_inv - start_inv) as f64 / iters as f64;
+    println!("batch_inv: {:.2} cycles/call", batch_inv_cycles);
 
     // 3. Measure mix_lanes (MDS) cycles
     let mut lanes = [Lane::new(0,0); 128];
@@ -72,13 +74,13 @@ fn main() {
     println!("pi_b (32 rounds): {:.2} cycles/call", pib_cycles);
     
     let single_round_cycles = pib_cycles / 32.0;
-    let inv_budget = 128.0 * ((end_inv - start_inv) as f64 / iters as f64);
+    let inv_budget = batch_inv_cycles;
     let mds_budget = (end_mds - start_mds) as f64 / mds_iters as f64;
     let sbox_overhead = single_round_cycles - inv_budget - mds_budget;
     
     println!("  -- Per Round Breakdown --");
     println!("  Total Round: {:.2} cycles", single_round_cycles);
-    println!("  Inversions (128x): {:.2} cycles ({:.1}%)", inv_budget, 100.0 * inv_budget / single_round_cycles);
+    println!("  Batch Inversion: {:.2} cycles ({:.1}%)", inv_budget, 100.0 * inv_budget / single_round_cycles);
     println!("  MDS Mixing: {:.2} cycles ({:.1}%)", mds_budget, 100.0 * mds_budget / single_round_cycles);
-    println!("  Other (SBox/Permute): {:.2} cycles ({:.1}%)", sbox_overhead, 100.0 * sbox_overhead / single_round_cycles);
+    println!("  Other (Overhead/Conversion): {:.2} cycles ({:.1}%)", sbox_overhead, 100.0 * sbox_overhead / single_round_cycles);
 }
