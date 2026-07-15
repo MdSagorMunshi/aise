@@ -242,3 +242,48 @@ fn test_sq_matches_mul() {
         );
     }
 }
+
+#[test]
+fn test_batch_inv_matches_independent() {
+    let mut rng = rand::thread_rng();
+
+    // Test 100 sets of 128 lanes
+    for trial in 0..100 {
+        let mut batch_lanes = [Lane::new(0, 0); 128];
+        let mut indep_lanes = [Lane::new(0, 0); 128];
+
+        for i in 0..128 {
+            let a = Lane::new(rng.r#gen(), rng.r#gen());
+            batch_lanes[i] = a;
+            indep_lanes[i] = a;
+        }
+
+        // Deliberately insert zero lanes to test the branchless zero-handling
+        if trial < 50 {
+            // Insert 1 to 5 random zero lanes
+            let num_zeros = rng.gen_range(1..=5);
+            for _ in 0..num_zeros {
+                let zero_idx = rng.gen_range(0..128);
+                batch_lanes[zero_idx] = Lane::new(0, 0);
+                indep_lanes[zero_idx] = Lane::new(0, 0);
+            }
+        }
+
+        // Execute batch inversion
+        field_b::batch_inv(&mut batch_lanes);
+
+        // Execute independent inversions
+        for i in 0..128 {
+            indep_lanes[i] = field_b::inv(indep_lanes[i]);
+        }
+
+        for i in 0..128 {
+            assert_eq!(
+                (batch_lanes[i].hi, batch_lanes[i].lo),
+                (indep_lanes[i].hi, indep_lanes[i].lo),
+                "batch_inv mismatch at trial {}, lane {}",
+                trial, i
+            );
+        }
+    }
+}

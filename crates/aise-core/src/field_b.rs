@@ -305,6 +305,50 @@ pub fn inv(a: Lane) -> Lane {
     sq(inv_base)
 }
 
+/// Montgomery Batch Inversion for 128 elements in GF(2^128).
+/// Inverts the slice in-place. Uses branchless masking for zero-handling.
+#[inline]
+pub fn batch_inv(lanes: &mut [Lane; 128]) {
+    let mut masks = [0u64; 128];
+    let mut c = [Lane::new(0, 0); 128];
+    
+    // Helper for branchless zero masking: returns !0 if lane is 0, else 0
+    let is_zero = |lane: Lane| -> u64 {
+        0u64.wrapping_sub(((lane.hi | lane.lo) == 0) as u64)
+    };
+    
+    let mut acc = Lane::new(0, 1); // Multiplicative identity
+    
+    // Step 1: Branchless zero-substitution and prefix product
+    for i in 0..128 {
+        let mask = is_zero(lanes[i]);
+        masks[i] = mask;
+        // Substitute 0 -> 1: a' = a ^ (mask & 1)
+        let a_prime = Lane::new(lanes[i].hi, lanes[i].lo ^ (mask & 1));
+        acc = mul(acc, a_prime);
+        c[i] = acc;
+    }
+    
+    // Step 2: Single inversion of the full product
+    let mut inv_prod = inv(acc);
+    
+    // Step 3: Back-multiplication
+    for i in (1..128).rev() {
+        let mask = masks[i];
+        let a_prime = Lane::new(lanes[i].hi, lanes[i].lo ^ (mask & 1));
+        
+        let a_inv = mul(inv_prod, c[i - 1]);
+        inv_prod = mul(inv_prod, a_prime);
+        
+        // Final correction: a_inv & !mask
+        lanes[i] = Lane::new(a_inv.hi & !mask, a_inv.lo & !mask);
+    }
+    
+    // Handle index 0
+    let mask = masks[0];
+    lanes[0] = Lane::new(inv_prod.hi & !mask, inv_prod.lo & !mask);
+}
+
 // ---------------------------------------------------------------------------
 // GF(2^128) addition (XOR — no dispatch needed)
 // ---------------------------------------------------------------------------

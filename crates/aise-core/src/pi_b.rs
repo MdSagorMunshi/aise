@@ -7,9 +7,7 @@ use crate::mds_b;
 
 pub fn pi_b(lanes: &mut [Lane; 128]) {
     for r in 0..32 {
-        for i in 0..128 {
-            lanes[i] = sbox_b::apply(lanes[i]);
-        }
+        sbox_b::batch_apply(lanes);
 
         mds_b::mix_lanes(lanes);
 
