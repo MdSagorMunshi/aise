@@ -1,9 +1,9 @@
 # Building and Testing AEGIS-Ω (AISE)
 
-This repository is built around the standard Rust `cargo` toolchain. Due to the advanced nature of the $\Pi_B$ and $\Pi_C$ mathematical requirements, AISE utilizes Rust Edition 2024.
+This repository is built around the standard Rust `cargo` toolchain. Due to the advanced nature of the $\Pi_B$ and $\Pi_C$ mathematical requirements, AISE utilizes Rust Edition 2021.
 
 ## Prerequisites
-- **Rust Toolchain**: `rustup` configured with a modern stable or nightly toolchain (Edition 2024).
+- **Rust Toolchain**: `rustup` configured with a modern stable or nightly toolchain (Edition 2021).
 
 ## Building the Toolkit
 

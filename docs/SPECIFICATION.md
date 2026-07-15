@@ -37,7 +37,10 @@ Operates over the binary extension field $GF(2^{128})$ defined by the irreducibl
 ### 3.3 Domain C: $GF(p)$ Prime Field Layer ($\Pi_C$)
 Operates over the prime field $GF(2^{127}-1)$, a Mersenne prime.
 - **Mapping**: $L_i$ mapped to $f_i = L_i \pmod{2^{127}-1}$.
-- **SBox_C**: A power map $S_C(x) = x^5 \pmod{p}$.
+- **SBox_C**: An alternating power map based on the Marvellous Design Strategy (Rescue) to maximize algebraic degree in both directions. $\Pi_C$ strictly alternates its S-Box based on the round parity:
+  - **Even Rounds** ($r = 0, 2, 4...$): Applies the high-degree inverse power map $S_{C\_even}(x) = x^d \pmod p$, where $d \equiv 5^{-1} \pmod{2^{127}-2}$.
+  - **Odd Rounds** ($r = 1, 3, 5...$): Applies the low-degree forward power map $S_{C\_odd}(x) = x^5 \pmod p$.
+  This alternation guarantees that interpolation and Gröbner basis attacks face maximal, exponential degree growth regardless of whether the attacker analyzes the permutation in the forward or backward direction.
 - **$M_{COL\_P}$ and $M_{ROW\_P}$**: $16 \times 16$ MDS matrices over $GF(p)$.
 - **$\sigma_C$**: The final spatial routing permutation.
 
