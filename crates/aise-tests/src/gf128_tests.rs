@@ -213,6 +213,23 @@ fn test_gf128_mul_portable_matches_reference() {
 
 #[test]
 fn test_sq_matches_mul() {
+    let edge_cases = [
+        Lane::new(0, 0),
+        Lane::new(u64::MAX, u64::MAX),
+        Lane::new(0x8000000000000000, 0), // top bit
+        Lane::new(0, 1), // bottom bit
+    ];
+    
+    for (i, &a) in edge_cases.iter().enumerate() {
+        let fast = field_b::sq(a);
+        let slow = field_b::mul(a, a);
+        assert_eq!(
+            (fast.hi, fast.lo), (slow.hi, slow.lo),
+            "sq vs mul mismatch at edge case {}: a=({:#018x},{:#018x})",
+            i, a.hi, a.lo
+        );
+    }
+
     let mut rng = rand::thread_rng();
     for trial in 0..10000 {
         let a = Lane::new(rng.r#gen(), rng.r#gen());
@@ -220,7 +237,7 @@ fn test_sq_matches_mul() {
         let slow = field_b::mul(a, a);
         assert_eq!(
             (fast.hi, fast.lo), (slow.hi, slow.lo),
-            "sq vs mul mismatch at trial {}: a=({:#018x},{:#018x})",
+            "sq vs mul mismatch at random trial {}: a=({:#018x},{:#018x})",
             trial, a.hi, a.lo
         );
     }
