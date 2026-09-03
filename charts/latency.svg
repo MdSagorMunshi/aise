@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 752 400" font-family="Inter, -apple-system, sans-serif">
+<rect width="752" height="400" fill="#0d1117" rx="12"/>
+<text x="376" y="30" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">Latency Comparison — Small Messages (Log Scale, lower is better)</text>
+<line x1="100" y1="290" x2="722" y2="290" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="294" text-anchor="end" fill="#8b949e" font-size="11">10 ns</text>
+<line x1="100" y1="252" x2="722" y2="252" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="256" text-anchor="end" fill="#8b949e" font-size="11">100 ns</text>
+<line x1="100" y1="213" x2="722" y2="213" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="217" text-anchor="end" fill="#8b949e" font-size="11">1.0K ns</text>
+<line x1="100" y1="175" x2="722" y2="175" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="179" text-anchor="end" fill="#8b949e" font-size="11">10.0K ns</text>
+<line x1="100" y1="137" x2="722" y2="137" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="141" text-anchor="end" fill="#8b949e" font-size="11">100.0K ns</text>
+<line x1="100" y1="98" x2="722" y2="98" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="102" text-anchor="end" fill="#8b949e" font-size="11">1.0M ns</text>
+<line x1="100" y1="60" x2="722" y2="60" stroke="#21262d" stroke-width="1"/>
+<text x="92" y="64" text-anchor="end" fill="#8b949e" font-size="11">10.0M ns</text>
+<text x="18" y="175" text-anchor="middle" fill="#8b949e" font-size="12" transform="rotate(-90, 18, 175)">Nanoseconds (log)</text>
+<rect x="125" y="95.5" width="20" height="194.5" fill="#FF6B35" rx="2" opacity="0.9"/>
+<rect x="147" y="260.2" width="20" height="29.8" fill="#4ECDC4" rx="2" opacity="0.9"/>
+<rect x="169" y="235.1" width="20" height="54.9" fill="#45B7D1" rx="2" opacity="0.9"/>
+<rect x="191" y="223.0" width="20" height="67.0" fill="#96CEB4" rx="2" opacity="0.9"/>
+<rect x="213" y="223.3" width="20" height="66.7" fill="#88D8B0" rx="2" opacity="0.9"/>
+<rect x="235" y="244.9" width="20" height="45.1" fill="#DDA0DD" rx="2" opacity="0.9"/>
+<rect x="257" y="253.4" width="20" height="36.6" fill="#FFD93D" rx="2" opacity="0.9"/>
+<text x="202" y="310" text-anchor="middle" fill="#c9d1d9" font-size="12" font-weight="600">32B</text>
+<rect x="329" y="94.4" width="20" height="195.6" fill="#FF6B35" rx="2" opacity="0.9"/>
+<rect x="351" y="253.4" width="20" height="36.6" fill="#4ECDC4" rx="2" opacity="0.9"/>
+<rect x="373" y="241.9" width="20" height="48.1" fill="#45B7D1" rx="2" opacity="0.9"/>
+<rect x="395" y="223.6" width="20" height="66.4" fill="#96CEB4" rx="2" opacity="0.9"/>
+<rect x="417" y="223.9" width="20" height="66.1" fill="#88D8B0" rx="2" opacity="0.9"/>
+<rect x="439" y="246.1" width="20" height="43.9" fill="#DDA0DD" rx="2" opacity="0.9"/>
+<rect x="461" y="255.4" width="20" height="34.6" fill="#FFD93D" rx="2" opacity="0.9"/>
+<text x="406" y="310" text-anchor="middle" fill="#c9d1d9" font-size="12" font-weight="600">64B</text>
+<rect x="533" y="95.5" width="20" height="194.5" fill="#FF6B35" rx="2" opacity="0.9"/>
+<rect x="555" y="250.1" width="20" height="39.9" fill="#4ECDC4" rx="2" opacity="0.9"/>
+<rect x="577" y="231.3" width="20" height="58.7" fill="#45B7D1" rx="2" opacity="0.9"/>
+<rect x="599" y="223.6" width="20" height="66.4" fill="#96CEB4" rx="2" opacity="0.9"/>
+<rect x="621" y="212.8" width="20" height="77.2" fill="#88D8B0" rx="2" opacity="0.9"/>
+<rect x="643" y="244.9" width="20" height="45.1" fill="#DDA0DD" rx="2" opacity="0.9"/>
+<rect x="665" y="246.1" width="20" height="43.9" fill="#FFD93D" rx="2" opacity="0.9"/>
+<text x="610" y="310" text-anchor="middle" fill="#c9d1d9" font-size="12" font-weight="600">128B</text>
+<rect x="100" y="350" width="12" height="12" fill="#FF6B35" rx="2"/>
+<text x="116" y="360" fill="#c9d1d9" font-size="11">AISE-HASH</text>
+<rect x="260" y="350" width="12" height="12" fill="#4ECDC4" rx="2"/>
+<text x="276" y="360" fill="#c9d1d9" font-size="11">SHA-256</text>
+<rect x="420" y="350" width="12" height="12" fill="#45B7D1" rx="2"/>
+<text x="436" y="360" fill="#c9d1d9" font-size="11">SHA-512</text>
+<rect x="580" y="350" width="12" height="12" fill="#96CEB4" rx="2"/>
+<text x="596" y="360" fill="#c9d1d9" font-size="11">SHA3-256</text>
+<rect x="100" y="370" width="12" height="12" fill="#88D8B0" rx="2"/>
+<text x="116" y="380" fill="#c9d1d9" font-size="11">SHA3-512</text>
+<rect x="260" y="370" width="12" height="12" fill="#DDA0DD" rx="2"/>
+<text x="276" y="380" fill="#c9d1d9" font-size="11">BLAKE2b</text>
+<rect x="420" y="370" width="12" height="12" fill="#FFD93D" rx="2"/>
+<text x="436" y="380" fill="#c9d1d9" font-size="11">BLAKE3</text>
+</svg>

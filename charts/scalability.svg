@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" font-family="Inter, -apple-system, sans-serif">
+<rect width="800" height="450" fill="#0d1117" rx="12"/>
+<text x="400" y="30" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">Scalability Profile — Throughput vs Input Size (Log-Log)</text>
+<line x1="90" y1="60" x2="90" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="90" y="368" text-anchor="middle" fill="#8b949e" font-size="10">10B</text>
+<line x1="203" y1="60" x2="203" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="203" y="368" text-anchor="middle" fill="#8b949e" font-size="10">100B</text>
+<line x1="317" y1="60" x2="317" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="317" y="368" text-anchor="middle" fill="#8b949e" font-size="10">1000B</text>
+<line x1="430" y1="60" x2="430" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="430" y="368" text-anchor="middle" fill="#8b949e" font-size="10">9KB</text>
+<line x1="543" y1="60" x2="543" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="543" y="368" text-anchor="middle" fill="#8b949e" font-size="10">97KB</text>
+<line x1="657" y1="60" x2="657" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="657" y="368" text-anchor="middle" fill="#8b949e" font-size="10">976KB</text>
+<line x1="770" y1="60" x2="770" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="770" y="368" text-anchor="middle" fill="#8b949e" font-size="10">9MB</text>
+<line x1="90" y1="350" x2="770" y2="350" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="354" text-anchor="end" fill="#8b949e" font-size="10">0.01</text>
+<line x1="90" y1="302" x2="770" y2="302" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="306" text-anchor="end" fill="#8b949e" font-size="10">0.10</text>
+<line x1="90" y1="253" x2="770" y2="253" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="257" text-anchor="end" fill="#8b949e" font-size="10">1</text>
+<line x1="90" y1="205" x2="770" y2="205" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="209" text-anchor="end" fill="#8b949e" font-size="10">10</text>
+<line x1="90" y1="157" x2="770" y2="157" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="161" text-anchor="end" fill="#8b949e" font-size="10">100</text>
+<line x1="90" y1="108" x2="770" y2="108" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="112" text-anchor="end" fill="#8b949e" font-size="10">1.0K</text>
+<line x1="90" y1="60" x2="770" y2="60" stroke="#21262d" stroke-width="1"/>
+<text x="82" y="64" text-anchor="end" fill="#8b949e" font-size="10">10.0K</text>
+<text x="18" y="205" text-anchor="middle" fill="#8b949e" font-size="12" transform="rotate(-90, 18, 205)">MB/s (log)</text>
+<text x="430" y="395" text-anchor="middle" fill="#8b949e" font-size="12">Input Size (log)</text>
+<path d="M181.4,315.8 L249.6,286.8 L317.8,266.0 L386.1,252.8 L454.3,245.4 L522.5,244.8 L590.8,243.8 L659.0,243.6" fill="none" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="315.8" r="3.5" fill="#FF6B35"/>
+<circle cx="249.6" cy="286.8" r="3.5" fill="#FF6B35"/>
+<circle cx="317.8" cy="266.0" r="3.5" fill="#FF6B35"/>
+<circle cx="386.1" cy="252.8" r="3.5" fill="#FF6B35"/>
+<circle cx="454.3" cy="245.4" r="3.5" fill="#FF6B35"/>
+<circle cx="522.5" cy="244.8" r="3.5" fill="#FF6B35"/>
+<circle cx="590.8" cy="243.8" r="3.5" fill="#FF6B35"/>
+<circle cx="659.0" cy="243.6" r="3.5" fill="#FF6B35"/>
+<path d="M181.4,116.5 L249.6,100.7 L317.8,93.4 L386.1,91.7 L454.3,90.8 L522.5,91.0 L590.8,90.7 L659.0,91.0" fill="none" stroke="#4ECDC4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="116.5" r="3.5" fill="#4ECDC4"/>
+<circle cx="249.6" cy="100.7" r="3.5" fill="#4ECDC4"/>
+<circle cx="317.8" cy="93.4" r="3.5" fill="#4ECDC4"/>
+<circle cx="386.1" cy="91.7" r="3.5" fill="#4ECDC4"/>
+<circle cx="454.3" cy="90.8" r="3.5" fill="#4ECDC4"/>
+<circle cx="522.5" cy="91.0" r="3.5" fill="#4ECDC4"/>
+<circle cx="590.8" cy="90.7" r="3.5" fill="#4ECDC4"/>
+<circle cx="659.0" cy="91.0" r="3.5" fill="#4ECDC4"/>
+<path d="M181.4,145.0 L249.6,136.4 L317.8,115.7 L386.1,113.9 L454.3,113.3 L522.5,123.7 L590.8,112.8 L659.0,114.5" fill="none" stroke="#45B7D1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="145.0" r="3.5" fill="#45B7D1"/>
+<circle cx="249.6" cy="136.4" r="3.5" fill="#45B7D1"/>
+<circle cx="317.8" cy="115.7" r="3.5" fill="#45B7D1"/>
+<circle cx="386.1" cy="113.9" r="3.5" fill="#45B7D1"/>
+<circle cx="454.3" cy="113.3" r="3.5" fill="#45B7D1"/>
+<circle cx="522.5" cy="123.7" r="3.5" fill="#45B7D1"/>
+<circle cx="590.8" cy="112.8" r="3.5" fill="#45B7D1"/>
+<circle cx="659.0" cy="114.5" r="3.5" fill="#45B7D1"/>
+<path d="M181.4,154.9 L249.6,139.4 L317.8,137.7 L386.1,136.9 L454.3,136.6 L522.5,136.2 L590.8,136.2 L659.0,136.5" fill="none" stroke="#96CEB4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="154.9" r="3.5" fill="#96CEB4"/>
+<circle cx="249.6" cy="139.4" r="3.5" fill="#96CEB4"/>
+<circle cx="317.8" cy="137.7" r="3.5" fill="#96CEB4"/>
+<circle cx="386.1" cy="136.9" r="3.5" fill="#96CEB4"/>
+<circle cx="454.3" cy="136.6" r="3.5" fill="#96CEB4"/>
+<circle cx="522.5" cy="136.2" r="3.5" fill="#96CEB4"/>
+<circle cx="590.8" cy="136.2" r="3.5" fill="#96CEB4"/>
+<circle cx="659.0" cy="136.5" r="3.5" fill="#96CEB4"/>
+<path d="M181.4,154.5 L249.6,153.4 L317.8,150.6 L386.1,149.5 L454.3,149.5 L522.5,149.5 L590.8,149.5 L659.0,149.6" fill="none" stroke="#88D8B0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="154.5" r="3.5" fill="#88D8B0"/>
+<circle cx="249.6" cy="153.4" r="3.5" fill="#88D8B0"/>
+<circle cx="317.8" cy="150.6" r="3.5" fill="#88D8B0"/>
+<circle cx="386.1" cy="149.5" r="3.5" fill="#88D8B0"/>
+<circle cx="454.3" cy="149.5" r="3.5" fill="#88D8B0"/>
+<circle cx="522.5" cy="149.5" r="3.5" fill="#88D8B0"/>
+<circle cx="590.8" cy="149.5" r="3.5" fill="#88D8B0"/>
+<circle cx="659.0" cy="149.6" r="3.5" fill="#88D8B0"/>
+<path d="M181.4,127.2 L249.6,108.8 L317.8,106.6 L386.1,106.1 L454.3,106.0 L522.5,106.3 L590.8,105.9 L659.0,105.9" fill="none" stroke="#DDA0DD" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="127.2" r="3.5" fill="#DDA0DD"/>
+<circle cx="249.6" cy="108.8" r="3.5" fill="#DDA0DD"/>
+<circle cx="317.8" cy="106.6" r="3.5" fill="#DDA0DD"/>
+<circle cx="386.1" cy="106.1" r="3.5" fill="#DDA0DD"/>
+<circle cx="454.3" cy="106.0" r="3.5" fill="#DDA0DD"/>
+<circle cx="522.5" cy="106.3" r="3.5" fill="#DDA0DD"/>
+<circle cx="590.8" cy="105.9" r="3.5" fill="#DDA0DD"/>
+<circle cx="659.0" cy="105.9" r="3.5" fill="#DDA0DD"/>
+<path d="M181.4,114.0 L249.6,107.1 L317.8,104.1 L386.1,81.0 L454.3,65.0 L522.5,65.1 L590.8,63.4 L659.0,63.3" fill="none" stroke="#FFD93D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<circle cx="181.4" cy="114.0" r="3.5" fill="#FFD93D"/>
+<circle cx="249.6" cy="107.1" r="3.5" fill="#FFD93D"/>
+<circle cx="317.8" cy="104.1" r="3.5" fill="#FFD93D"/>
+<circle cx="386.1" cy="81.0" r="3.5" fill="#FFD93D"/>
+<circle cx="454.3" cy="65.0" r="3.5" fill="#FFD93D"/>
+<circle cx="522.5" cy="65.1" r="3.5" fill="#FFD93D"/>
+<circle cx="590.8" cy="63.4" r="3.5" fill="#FFD93D"/>
+<circle cx="659.0" cy="63.3" r="3.5" fill="#FFD93D"/>
+<rect x="90" y="415" width="14" height="3" fill="#FF6B35" rx="1"/>
+<text x="108" y="420" fill="#c9d1d9" font-size="11">AISE-HASH</text>
+<rect x="260" y="415" width="14" height="3" fill="#4ECDC4" rx="1"/>
+<text x="278" y="420" fill="#c9d1d9" font-size="11">SHA-256</text>
+<rect x="430" y="415" width="14" height="3" fill="#45B7D1" rx="1"/>
+<text x="448" y="420" fill="#c9d1d9" font-size="11">SHA-512</text>
+<rect x="600" y="415" width="14" height="3" fill="#96CEB4" rx="1"/>
+<text x="618" y="420" fill="#c9d1d9" font-size="11">SHA3-256</text>
+<rect x="90" y="433" width="14" height="3" fill="#88D8B0" rx="1"/>
+<text x="108" y="438" fill="#c9d1d9" font-size="11">SHA3-512</text>
+<rect x="260" y="433" width="14" height="3" fill="#DDA0DD" rx="1"/>
+<text x="278" y="438" fill="#c9d1d9" font-size="11">BLAKE2b</text>
+<rect x="430" y="433" width="14" height="3" fill="#FFD93D" rx="1"/>
+<text x="448" y="438" fill="#c9d1d9" font-size="11">BLAKE3</text>
+</svg>

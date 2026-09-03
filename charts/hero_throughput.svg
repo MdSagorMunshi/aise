@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 420" font-family="Inter, -apple-system, sans-serif">
+<rect width="750" height="420" fill="#0d1117" rx="12"/>
+<text x="375" y="30" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">Throughput at 1MB Input — All Algorithms</text>
+<text x="375" y="48" text-anchor="middle" fill="#8b949e" font-size="11">Higher is better | Release build, target-cpu=native</text>
+<text x="110" y="81" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">AISE-HASH</text>
+<rect x="120" y="60" width="3" height="32" fill="#FF6B35" rx="4" opacity="0.9"/>
+<text x="131" y="81" fill="#e6edf3" font-size="12" font-weight="600">1.59 MB/s</text>
+<text x="110" y="121" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">SHA-256</text>
+<rect x="120" y="100" width="140" height="32" fill="#4ECDC4" rx="4" opacity="0.9"/>
+<text x="268" y="121" fill="#e6edf3" font-size="12" font-weight="600">2284.40 MB/s</text>
+<text x="110" y="161" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">SHA-512</text>
+<rect x="120" y="140" width="46" height="32" fill="#45B7D1" rx="4" opacity="0.9"/>
+<text x="174" y="161" fill="#e6edf3" font-size="12" font-weight="600">747.05 MB/s</text>
+<text x="110" y="201" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">SHA3-256</text>
+<rect x="120" y="180" width="16" height="32" fill="#96CEB4" rx="4" opacity="0.9"/>
+<text x="144" y="201" fill="#e6edf3" font-size="12" font-weight="600">261.86 MB/s</text>
+<text x="110" y="241" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">SHA3-512</text>
+<rect x="120" y="220" width="9" height="32" fill="#88D8B0" rx="4" opacity="0.9"/>
+<text x="137" y="241" fill="#e6edf3" font-size="12" font-weight="600">140.09 MB/s</text>
+<text x="110" y="281" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">BLAKE2b</text>
+<rect x="120" y="260" width="69" height="32" fill="#DDA0DD" rx="4" opacity="0.9"/>
+<text x="197" y="281" fill="#e6edf3" font-size="12" font-weight="600">1121.49 MB/s</text>
+<text x="110" y="321" text-anchor="end" fill="#c9d1d9" font-size="12" font-weight="500">BLAKE3</text>
+<rect x="120" y="300" width="522" height="32" fill="#FFD93D" rx="4" opacity="0.9"/>
+<text x="650" y="321" fill="#e6edf3" font-size="12" font-weight="600">8531.70 MB/s</text>
+</svg>
