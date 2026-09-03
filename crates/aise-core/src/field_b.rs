@@ -304,7 +304,7 @@ pub fn inv(a: Lane) -> Lane {
     
     sq(inv_base)
 }
-
+#[cfg(target_arch = "x86_64")]
 use crate::field_b_avx512;
 
 /// Montgomery Batch Inversion for 128 elements in GF(2^128).

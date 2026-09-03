@@ -1,0 +1,80 @@
+name: Release Binaries
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build - ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            use_cross: false
+            name: aise-linux-x86_64-gnu
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            use_cross: true
+            name: aise-linux-x86_64-musl-static
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+            use_cross: true
+            name: aise-linux-aarch64-arm64
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-latest
+            use_cross: true
+            name: aise-linux-aarch64-musl-static
+          - target: armv7-unknown-linux-gnueabihf
+            os: ubuntu-latest
+            use_cross: true
+            name: aise-linux-armv7hf
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install Cross (for cross-compilation)
+        if: matrix.use_cross
+        run: |
+          cargo install cross --git https://github.com/cross-rs/cross
+
+      - name: Build aise-cli
+        run: |
+          if [ "${{ matrix.use_cross }}" = "true" ]; then
+            cross build --release --target ${{ matrix.target }} -p aise-cli
+          else
+            cargo build --release --target ${{ matrix.target }} -p aise-cli
+          fi
+
+      - name: Package artifacts
+        shell: bash
+        run: |
+          BIN_PATH="target/${{ matrix.target }}/release/aise-cli"
+          ARCHIVE_DIR="${{ matrix.name }}"
+          mkdir -p "$ARCHIVE_DIR"
+          cp "$BIN_PATH" "$ARCHIVE_DIR/aise-cli"
+          cp README.md LICENSE-MIT LICENSE-APACHE "$ARCHIVE_DIR/"
+          tar -czvf "${{ matrix.name }}.tar.gz" "$ARCHIVE_DIR"
+          sha256sum "${{ matrix.name }}.tar.gz" > "${{ matrix.name }}.tar.gz.sha256"
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ${{ matrix.name }}.tar.gz
+            ${{ matrix.name }}.tar.gz.sha256
