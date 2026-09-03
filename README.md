@@ -76,11 +76,13 @@ To achieve production-grade throughput over the massive 16,384-bit state, AISE h
 - **VPCLMULQDQ**: Hardware-accelerates the $GF(2^{128})$ multiplications and inversions in $\Pi_B$.
 - **AVX-512 IFMA**: Accelerates the large-integer prime modulus arithmetic in $\Pi_C$.
 
-**Throughput (AVX-512 Optimized):**
-- $\Pi_A$ (ARX): ~50 MB/s
-- $\Pi_B$ (Binary Field): ~19.17 MB/s
-- $\Pi_C$ (Prime Field): ~3.74 MB/s
-- **Full $\Pi_\Omega$ Cascade**: **~3.04 MB/s** (a ~100x speedup from the scalar baseline)
+**Throughput (AVX-512 Optimized, AMD Ryzen 5 7600):**
+- $\Pi_A$ (ARX): ~145 MB/s
+- $\Pi_B$ (Binary Field): ~19.74 MB/s
+- $\Pi_C$ (Prime Field): ~4.06 MB/s
+- **Full $\Pi_\Omega$ Cascade**: **~3.30 MB/s** (a ~100x speedup from the scalar baseline)
+
+> 📊 For a full comparison against SHA-256, SHA-512, SHA3, BLAKE2b, and BLAKE3, see the **[Benchmark Report](COMPARE.md)**.
 
 *Note: For non-x86_64 architectures, CPUs without AVX-512, or `#![no_std]` embedded targets, the implementation automatically and safely falls back to a purely scalar path.*
 
@@ -114,6 +116,7 @@ cargo run --release --bin aise-cli -- -s "Seed" -l 1024
 
 ## Documentation
 - [Formal Specification](docs/SPECIFICATION.md): Mathematical definitions and bounds.
+- [Benchmark Comparison](COMPARE.md): Live performance comparison against SHA-2, SHA-3, BLAKE2b, and BLAKE3.
 - [Build Instructions](BUILD.md): Instructions for compiling and testing.
 - [Wiki](docs/WIKI.md): Deep-dive documentation index.
 - [Contributing Guidelines](CONTRIBUTING.md): How to contribute safely to the core matrices and logic.
