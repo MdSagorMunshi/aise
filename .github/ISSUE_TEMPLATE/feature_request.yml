@@ -1,0 +1,42 @@
+name: 💡 Feature or Optimization Proposal
+description: Propose an architecture optimization (e.g. ARM NEON, AVX2), new primitive mode, or tooling improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Proposal Scope
+      description: Which area does your suggestion target?
+      options:
+        - "SIMD Vector Optimization (ARM NEON / SVE, AVX2, RISC-V Vector)"
+        - "Cryptographic Primitive / Sponge Mode (e.g., AEAD, Key Exchange, PQC Commitments)"
+        - "CLI / GUI Enhancements"
+        - "Documentation / Specification / Formal Proofs"
+        - "Benchmarking & Verification Suites"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Motivation / Problem Statement
+      description: Is your feature request related to a specific bottleneck, missing platform support, or new use case?
+      placeholder: What capability is currently missing or suboptimal?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution & Technical Details
+      description: Describe the design, algorithms, intrinsics, or API changes you envision.
+      placeholder: Provide pseudocode, API signatures, or vector implementation strategies.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative designs, crates, or trade-offs you considered.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Mathematical Specification
+    url: https://github.com/MdSagorMunshi/aise/blob/main/docs/SPECIFICATION.md
+    about: Review formal definitions for Π_A, Π_B, and Π_C before opening algebraic issues.
+  - name: 📊 Benchmark & Performance Report
+    url: https://github.com/MdSagorMunshi/aise/blob/main/COMPARE.md
+    about: Review empirical live benchmarks across SHA-2, SHA-3, and BLAKE3.

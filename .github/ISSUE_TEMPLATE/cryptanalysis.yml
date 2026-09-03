@@ -1,0 +1,59 @@
+name: 🔬 Cryptanalysis / Mathematical Observation
+description: Report findings regarding algebraic degree, linear/differential trails, or domain interactions.
+title: "[Cryptanalysis]: "
+labels: ["cryptanalysis", "research"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        AEGIS-Ω (AISE) is an open research construction. We welcome formal and empirical cryptanalysis, including degree bounds on the alternating power maps, differential branch numbers of the MDS matrices, invariant subspaces, or multi-algebraic cascade properties.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Target Algebraic Domain / Component
+      description: Which part of the construction does this analysis target?
+      options:
+        - "Π_A: ARX Domain (ℤ_{2^64})"
+        - "Π_B: Binary Extension Field (GF(2^128))"
+        - "Π_C: Prime Field & Alternating Power Map (GF(2^127 - 1))"
+        - "Π_Ω: Full Cascade Composition"
+        - "Sponge Structure (Rate/Capacity / Duplex / Tree Mode)"
+        - "MDS Matrix Construction (Branch Numbers / Invariants)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Analysis Summary
+      description: Provide an executive summary of your mathematical or cryptanalytic finding.
+      placeholder: Describe the observed algebraic relation, trail, bound, or anomaly.
+    validations:
+      required: true
+
+  - type: textarea
+    id: methodology
+    attributes:
+      label: Methodology & Proof of Concept
+      description: Detail the steps, equations, or script used (e.g. SageMath, Python, Magma, or C/Rust).
+      placeholder: |
+        Provide minimal scripts or mathematical proofs reproducing the observation.
+      render: python
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Security Implications
+      description: How does this affect the claims in docs/SPECIFICATION.md? Does this reduce security margins, violate assumed diffusion bounds, or present theoretical distinguishers?
+      placeholder: Detail the effective round reduction or complexity estimates.
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References & Related Work
+      description: Citations to relevant academic papers, design paradigms (Rescue, Marvellous, Hades), or tools.

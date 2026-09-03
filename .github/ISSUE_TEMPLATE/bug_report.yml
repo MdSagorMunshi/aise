@@ -1,0 +1,76 @@
+name: 🐛 Bug Report
+description: Report unexpected execution errors, crashes, panics, or incorrect outputs.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Because AEGIS-Ω (AISE) utilizes specialized hardware vector intrinsics (AVX-512, VPCLMULQDQ, AVX-512 IFMA) alongside scalar fallbacks, precise hardware environment details are essential.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: What failed or returned an unexpected output?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: execution-path
+    attributes:
+      label: Execution Path Affected
+      description: Which computational path was executing when the issue occurred?
+      options:
+        - "AVX-512 Hardware Vector Path"
+        - "Scalar Fallback Path"
+        - "Both / Architecture-Independent"
+        - "Uncertain"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Provide the exact CLI invocation, code snippet, or test case to reproduce the behavior.
+      placeholder: |
+        ```bash
+        # Example CLI command or test invocation
+        cargo run --release --bin aise-cli -- -s "Test message"
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: Expected vs Actual Behavior
+      description: What did you expect to happen versus what actually happened? Include hash digests or panics.
+      placeholder: |
+        Expected: [digest or normal completion]
+        Actual: [panic or unexpected hash]
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment & Hardware Details
+      description: Run `rustc -Vv` and check your CPU features.
+      placeholder: |
+        - OS: [e.g. Ubuntu 24.04 LTS / Linux x86_64]
+        - CPU Model: [e.g. AMD Ryzen 5 7600 / Intel Core i9-13900K]
+        - CPU Flags: [e.g. avx512f, vpclmulqdq, avx512ifma, avx512bw]
+        - Rustc Version: [e.g. rustc 1.80.0 (or cargo --version)]
+        - Compilation Flags: [e.g. RUSTFLAGS="-C target-cpu=native"]
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs / Backtraces
+      description: Paste any backtraces or compiler outputs (set `RUST_BACKTRACE=1` if it panicked).
+      render: shell
