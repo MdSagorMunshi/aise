@@ -93,10 +93,30 @@ AISE includes a rigorous verification suite to mathematically prove the correctn
 - **Equivalence Fuzzing:** The AVX-512 optimized routines are fuzzed against the scalar reference implementations for tens of thousands of iterations, verifying mathematical equivalence.
 
 ## Security Claims
-AEGIS-Ω provides classical and quantum security margins that vastly exceed standardized algorithms. Assuming the permutations behave ideally:
-- **Classical Collision Resistance:** $2^{4096}$ operations
-- **Quantum Collision Resistance (BHT):** $2^{2730}$ operations
-- **Quantum Preimage Resistance (Grover):** $2^{2048}$ operations
+
+> **⚠️ AISE has not undergone independent cryptanalysis. The bounds below assume ideal permutation behavior and are theoretical upper limits, not proven security levels.**
+
+AISE-HASH produces a **512-bit digest**. Generic security bounds are determined by the output length:
+- **Classical Collision Resistance:** ~$2^{256}$ (birthday bound on 512-bit output)
+- **Classical Preimage Resistance:** $2^{512}$
+- **Quantum Collision Resistance (BHT):** ~$2^{171}$
+- **Quantum Preimage Resistance (Grover):** $2^{256}$
+
+### What the 16,384-bit State Provides
+
+The large internal state does **not** increase the output-level collision bound — that is fixed by the 512-bit digest. Instead, it provides *structural* security margin within the sponge construction:
+
+- **8,192-bit capacity**: Resistance to inner-collision attacks, state-recovery attacks, and capacity-targeting attacks. This is 8× larger than SHA3-512's capacity (1,024 bits).
+- **Algebraic heterogeneity**: Three independent mathematical domains (ARX over $\mathbb{Z}_{2^{64}}$, inversion in $GF(2^{128})$, alternating power maps in $GF(2^{127}-1)$) that an attacker must simultaneously defeat.
+- **96 total rounds** across 3 algebraically incompatible domains.
+
+### Design Note: Surjective Permutation
+
+$\Pi_\Omega$ is a *surjection*, not a bijection: each 128-bit lane is reduced to 127 bits via Mersenne reduction before $\Pi_C$, causing ~128 bits of information loss per permutation call. This is noted explicitly in `permute.rs`. The standard sponge security proof (which assumes a bijective permutation) requires careful adaptation for this design.
+
+### Cryptanalysis Status
+
+AEGIS-Ω has **not been subjected to independent cryptanalysis**. The next step for validating AISE is not adding more rounds — it is attempting to *break* the existing design. Priority analysis targets include: differential trails, linear approximations, rotational attacks, integral attacks, algebraic attacks, rebound attacks, and especially attacks exploiting the 128→127-bit lossy domain transition. See [SECURITY.md](SECURITY.md) for responsible disclosure and how to contribute.
 
 ## Usage & Examples
 

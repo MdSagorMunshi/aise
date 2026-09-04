@@ -122,19 +122,29 @@
 
 ---
 
-## Security Margin Comparison
+## Security Analysis
 
-> Why AISE is slow *on purpose*: it purchases an astronomically large security margin.
+> [!IMPORTANT]
+> **Generic security bounds are determined by the output length, not the state size.** For a 512-bit hash output, the birthday bound gives ~2²⁵⁶ collision resistance regardless of internal state width. AISE's 16,384-bit state provides structural margin against *non-generic* attacks (inner collisions, state recovery, capacity-targeting), but does not raise the output-level collision bound.
 
 | Property | AISE-HASH | SHA-256 | SHA-512 | SHA3-256 | SHA3-512 | BLAKE2b | BLAKE3 |
 |---|---|---|---|---|---|---|---|
-| **State Size** | **16,384-bit** | 256-bit | 1,024-bit | 1,600-bit | 1,600-bit | 512-bit | 256-bit |
 | **Output Size** | 512-bit | 256-bit | 512-bit | 256-bit | 512-bit | 512-bit | 256-bit |
-| **Classical Collision** | **2⁴⁰⁹⁶** | 2¹²⁸ | 2²⁵⁶ | 2¹²⁸ | 2²⁵⁶ | 2²⁵⁶ | 2¹²⁸ |
-| **Quantum Collision (BHT)** | **2²⁷³⁰** | 2⁸⁵ | 2¹⁷⁰ | 2⁸⁵ | 2¹⁷⁰ | 2¹⁷⁰ | 2⁸⁵ |
-| **Quantum Preimage (Grover)** | **2²⁰⁴⁸** | 2¹²⁸ | 2²⁵⁶ | 2¹²⁸ | 2²⁵⁶ | 2²⁵⁶ | 2¹²⁸ |
+| **Classical Collision** | 2²⁵⁶ † | 2¹²⁸ | 2²⁵⁶ | 2¹²⁸ | 2²⁵⁶ | 2²⁵⁶ | 2¹²⁸ |
+| **Quantum Collision (BHT)** | ~2¹⁷¹ † | 2⁸⁵ | ~2¹⁷⁰ | 2⁸⁵ | ~2¹⁷⁰ | ~2¹⁷⁰ | 2⁸⁵ |
+| **Classical Preimage** | 2⁵¹² † | 2²⁵⁶ | 2⁵¹² | 2²⁵⁶ | 2⁵¹² | 2⁵¹² | 2²⁵⁶ |
+| **Quantum Preimage (Grover)** | 2²⁵⁶ † | 2¹²⁸ | 2²⁵⁶ | 2¹²⁸ | 2²⁵⁶ | 2²⁵⁶ | 2¹²⁸ |
+| **Internal State Size** | **16,384-bit** | 256-bit | 1,024-bit | 1,600-bit | 1,600-bit | 512-bit | 256-bit |
+| **Capacity (sponge)** | **8,192-bit** | N/A | N/A | 512-bit | 1,024-bit | N/A | N/A |
 | **Algebraic Domains** | **3** (ARX + GF(2¹²⁸) + GF(p)) | 1 | 1 | 1 | 1 | 1 | 1 |
 | **Permutation Rounds** | **32 × 3** = 96 | 64 | 80 | 24 | 24 | 12 | 7 |
+
+† *Generic bounds assuming ideal permutation behavior. AISE has not undergone independent cryptanalysis — these bounds are theoretical upper limits, not proven security levels.*
+
+> [!NOTE]
+> **What the 16,384-bit state actually provides:** In the sponge model, the capacity (8,192 bits for AISE) determines resistance to *structural* attacks — inner-collision attacks, state-recovery attacks, and capacity-targeting attacks. AISE's capacity is 8× larger than SHA3-512's (1,024 bits) and 16× larger than SHA3-256's (512 bits). This is a meaningful structural advantage, but it is distinct from the output-level collision bound.
+>
+> **Important design note:** Π_Ω is a *surjection*, not a bijection. Each 128-bit lane is reduced to 127 bits via Mersenne reduction before Π_C, causing ~128 bits of information loss per permutation call. This does not break the hash (compression is inherent to hashing), but it means the standard sponge security proof — which assumes a bijective permutation — requires careful adaptation.
 
 ---
 
@@ -173,17 +183,19 @@
 - Direct replacement for SHA-512 with better performance
 - Best choice for: password hashing (Argon2 internal), key derivation, general-purpose 512-bit digest
 
-### 🔮 AISE-HASH — Best for: Extreme Security Margin & Research
+### 🔮 AISE-HASH — Best for: Structural Security Margin & Research
 
 - **1.59 MB/s** — deliberately slow due to 16,384-bit state processing
-- **3 algebraically independent domains** — no single mathematical breakthrough can compromise it
-- **2⁴⁰⁹⁶ classical collision resistance** — incomprehensibly beyond any attack horizon
+- **3 algebraically independent domains** — an attacker must simultaneously defeat ARX, binary field, and prime field constructions
+- **8,192-bit capacity** — the largest sponge capacity of any known hash construction, providing enormous structural margin against non-generic attacks
+- **~2²⁵⁶ generic collision resistance** — same output-level bound as SHA-512/SHA3-512/BLAKE2b (all produce 512-bit digests)
 - Best choice for:
-  - Post-quantum archival hashing (data that must remain secure for centuries)
-  - Cryptographic commitments where security margin matters more than speed
   - Research baseline for multi-algebraic sponge designs
+  - Exploring heterogeneous permutation cascades
+  - Scenarios where structural diversity matters more than raw throughput
   - Hashing small secrets (keys, passwords, tokens) where latency is acceptable
 - **Not suitable for:** high-throughput data pipelines, real-time file hashing, network protocols
+- **Cryptanalysis status:** Unaudited — independent analysis is actively invited (see [SECURITY.md](SECURITY.md))
 
 ---
 
@@ -192,13 +204,18 @@
 AEGIS-Ω is **~5356x slower** than BLAKE3 (the fastest algorithm tested) and **~1434x slower** than SHA-256. This is **entirely by design**.
 
 AISE's performance cost buys:
-1. **Algebraic heterogeneity**: Three independent mathematical domains (ARX, GF(2¹²⁸), GF(p)) that cannot be simultaneously exploited
-2. **Massive state**: 16,384-bit internal state (10x larger than Keccak, 64x larger than SHA-256)
-3. **Post-quantum margin**: Security levels that remain comfortable even against theoretical quantum computers
-4. **Rescue-style S-boxes**: Alternating power maps that guarantee exponential algebraic degree growth in both forward and backward directions
+1. **Algebraic heterogeneity**: Three independent mathematical domains (ARX, GF(2¹²⁸), GF(p)) that an attacker must simultaneously defeat
+2. **Massive structural margin**: 16,384-bit internal state with 8,192-bit capacity (8× larger than SHA3-512, 16× larger than SHA3-256), providing deep resistance to inner-collision and state-recovery attacks
+3. **Rescue-style S-boxes**: Alternating power maps ($x^5$ / $x^d$) that guarantee exponential algebraic degree growth in both forward and backward directions
+4. **96 total rounds** across 3 algebraic domains (vs. 24 for SHA3, 7 for BLAKE3)
 
-The question is never *"is AISE fast?"* — it's *"is the security margin worth the cost for your specific use case?"* For archival commitments and cryptographic research, the answer is yes. For hashing gigabytes of data, use BLAKE3.
+**What this does NOT buy:** The generic collision resistance of AISE-HASH is ~2²⁵⁶ — identical to SHA-512, SHA3-512, and BLAKE2b — because all produce 512-bit outputs. The large internal state provides *structural* security margin, not a higher output-level collision bound.
+
+The question is: *"does the structural diversity and enormous capacity justify the performance cost for your use case?"* For cryptographic research and exploring multi-algebraic designs, yes. For hashing gigabytes of data, use BLAKE3.
+
+> [!WARNING]
+> AEGIS-Ω has **not undergone independent cryptanalysis**. The security claims above assume ideal permutation behavior. Until the design has been subjected to rigorous analysis by independent cryptographers, AISE should be treated as an experimental research construction. See [SECURITY.md](SECURITY.md) for how to contribute cryptanalysis.
 
 ---
 
-*Report generated by AEGIS-Ω Benchmark Suite — Claude Opus 4.6*
+*Report generated by AEGIS-Ω Benchmark Suite*

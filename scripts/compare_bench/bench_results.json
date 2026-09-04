@@ -1,0 +1,972 @@
+{
+  "system_info": {
+    "cpu": "AMD Ryzen 5 7600 6-Core Processor",
+    "rust_version": "0.1.0",
+    "date": "2026-09-04 00:42:53 +06",
+    "avx512": true,
+    "target_cpu": "native"
+  },
+  "throughput": [
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 0.05091855575540469,
+      "median_ns": 1198682,
+      "stddev_ns": 112617.20093228976,
+      "iterations": 379
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 678.1684027777778,
+      "median_ns": 90,
+      "stddev_ns": 29.209150501167603,
+      "iterations": 5494505
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 174.38616071428572,
+      "median_ns": 350,
+      "stddev_ns": 60.996341302727906,
+      "iterations": 1420454
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 108.99135044642857,
+      "median_ns": 560,
+      "stddev_ns": 63.03483164427028,
+      "iterations": 892857
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 110.97301136363636,
+      "median_ns": 550,
+      "stddev_ns": 61.06327860650817,
+      "iterations": 905797
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 406.9010416666667,
+      "median_ns": 150,
+      "stddev_ns": 45.727155601271825,
+      "iterations": 3289473
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 64,
+      "input_label": "64B",
+      "throughput_mbps": 762.939453125,
+      "median_ns": 80,
+      "stddev_ns": 42.70222707210317,
+      "iterations": 5882352
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 0.20288548475828153,
+      "median_ns": 1203342,
+      "stddev_ns": 20771.191345576543,
+      "iterations": 415
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 1436.121323529412,
+      "median_ns": 170,
+      "stddev_ns": 128.77964333155376,
+      "iterations": 2890173
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 262.5168010752688,
+      "median_ns": 930,
+      "stddev_ns": 296.9809889057571,
+      "iterations": 544069
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 228.16880841121497,
+      "median_ns": 1070,
+      "stddev_ns": 323.76441032393154,
+      "iterations": 465549
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 116.81369617224881,
+      "median_ns": 2090,
+      "stddev_ns": 444.6755442346857,
+      "iterations": 237755
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 976.5625,
+      "median_ns": 250,
+      "stddev_ns": 165.58282843867616,
+      "iterations": 1915708
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 256,
+      "input_label": "256B",
+      "throughput_mbps": 1061.4809782608695,
+      "median_ns": 230,
+      "stddev_ns": 84.63966884729507,
+      "iterations": 2118644
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 0.5477744895337736,
+      "median_ns": 1782782,
+      "stddev_ns": 61142.335919229,
+      "iterations": 277
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 2034.5052083333335,
+      "median_ns": 480,
+      "stddev_ns": 42.38971485900144,
+      "iterations": 1050420
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 702.5629496402878,
+      "median_ns": 1390,
+      "stddev_ns": 130.84588974705238,
+      "iterations": 361532
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 246.60669191919192,
+      "median_ns": 3960,
+      "stddev_ns": 197.06335909591613,
+      "iterations": 124316
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 133.2281718963165,
+      "median_ns": 7330,
+      "stddev_ns": 414.4132326012406,
+      "iterations": 67494
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 1085.0694444444446,
+      "median_ns": 900,
+      "stddev_ns": 69.538126373368,
+      "iterations": 555555
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 1024,
+      "input_label": "1KB",
+      "throughput_mbps": 1220.703125,
+      "median_ns": 800,
+      "stddev_ns": 1990.344779507989,
+      "iterations": 612745
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 1.0266294202227795,
+      "median_ns": 3804927,
+      "stddev_ns": 532345.8222189227,
+      "iterations": 124
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 2206.9209039548023,
+      "median_ns": 1770,
+      "stddev_ns": 324.14720987457497,
+      "iterations": 250250
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 765.9313725490196,
+      "median_ns": 5100,
+      "stddev_ns": 1497.906554401914,
+      "iterations": 55090
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 256.31561679790025,
+      "median_ns": 15240,
+      "stddev_ns": 859.4383819152971,
+      "iterations": 31557
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 140.71505763688762,
+      "median_ns": 27760,
+      "stddev_ns": 1487.6657615654408,
+      "iterations": 17917
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 1112.8917378917379,
+      "median_ns": 3510,
+      "stddev_ns": 461.49564133758605,
+      "iterations": 142287
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 4096,
+      "input_label": "4KB",
+      "throughput_mbps": 3685.1415094339623,
+      "median_ns": 1060,
+      "stddev_ns": 248.0188832787494,
+      "iterations": 475285
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 1.4626646539152888,
+      "median_ns": 10682558,
+      "stddev_ns": 270095.6972209241,
+      "iterations": 100
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 2307.9763663220087,
+      "median_ns": 6770,
+      "stddev_ns": 3012.577420466516,
+      "iterations": 62672
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 788.3451059535822,
+      "median_ns": 19820,
+      "stddev_ns": 8303.176743561842,
+      "iterations": 22998
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 259.6377534064473,
+      "median_ns": 60180,
+      "stddev_ns": 1825.2934647388452,
+      "iterations": 8154
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 140.73913944208752,
+      "median_ns": 111021,
+      "stddev_ns": 3884.8507547361455,
+      "iterations": 4443
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 1119.2693409742121,
+      "median_ns": 13960,
+      "stddev_ns": 738.8157762197967,
+      "iterations": 35688
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 16384,
+      "input_label": "16KB",
+      "throughput_mbps": 7891.414141414141,
+      "median_ns": 1980,
+      "stddev_ns": 219.6711916902973,
+      "iterations": 252652
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 1.500729234349555,
+      "median_ns": 41646420,
+      "stddev_ns": 1037016.4926555638,
+      "iterations": 100
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 2283.5221044939713,
+      "median_ns": 27370,
+      "stddev_ns": 616.5423144104205,
+      "iterations": 18230
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 480.654613130715,
+      "median_ns": 130031,
+      "stddev_ns": 119353.60054395437,
+      "iterations": 6015
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 264.69479631206036,
+      "median_ns": 236121,
+      "stddev_ns": 10830.475952685749,
+      "iterations": 2064
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 140.3923348031475,
+      "median_ns": 445181,
+      "stddev_ns": 11724.291244219903,
+      "iterations": 1121
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 1101.1275546159268,
+      "median_ns": 56760,
+      "stddev_ns": 1185.6689694011975,
+      "iterations": 8878
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 65536,
+      "input_label": "64KB",
+      "throughput_mbps": 7851.75879396985,
+      "median_ns": 7960,
+      "stddev_ns": 375.2454584245161,
+      "iterations": 62877
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 1.578498945117568,
+      "median_ns": 158378313,
+      "stddev_ns": 5617141.615440562,
+      "iterations": 100
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 2319.7335090144843,
+      "median_ns": 107771,
+      "stddev_ns": 3410.1525558721883,
+      "iterations": 4549
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 808.5120144885353,
+      "median_ns": 309210,
+      "stddev_ns": 6775.301589155325,
+      "iterations": 1598
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 264.5189141604381,
+      "median_ns": 945112,
+      "stddev_ns": 23334.90368980007,
+      "iterations": 521
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 140.8448323749312,
+      "median_ns": 1775003,
+      "stddev_ns": 21414.03276332754,
+      "iterations": 281
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 1120.6239634228339,
+      "median_ns": 223090,
+      "stddev_ns": 11738.647245655402,
+      "iterations": 2201
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 262144,
+      "input_label": "256KB",
+      "throughput_mbps": 8503.401360544218,
+      "median_ns": 29400,
+      "stddev_ns": 611.1082860486677,
+      "iterations": 17099
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 1.5929575677265981,
+      "median_ns": 627763112,
+      "stddev_ns": 20272562.935487702,
+      "iterations": 100
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 2284.4036906826027,
+      "median_ns": 437751,
+      "stddev_ns": 2716.470045223875,
+      "iterations": 1139
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 747.0536205206665,
+      "median_ns": 1338592,
+      "stddev_ns": 98570.78063081388,
+      "iterations": 367
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 261.8583880311863,
+      "median_ns": 3818858,
+      "stddev_ns": 25325.373546175262,
+      "iterations": 130
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 140.09067228673086,
+      "median_ns": 7138234,
+      "stddev_ns": 10523.222786561159,
+      "iterations": 100
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 1121.4886191334929,
+      "median_ns": 891672,
+      "stddev_ns": 31376.81132815974,
+      "iterations": 558
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 1048576,
+      "input_label": "1MB",
+      "throughput_mbps": 8531.695247845748,
+      "median_ns": 117210,
+      "stddev_ns": 1872.8948166419398,
+      "iterations": 4280
+    }
+  ],
+  "latency": [
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 32,
+      "median_ns": 1187713,
+      "p99_ns": 1378822,
+      "min_ns": 1176442
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 32,
+      "median_ns": 60,
+      "p99_ns": 70,
+      "min_ns": 50
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 32,
+      "median_ns": 270,
+      "p99_ns": 390,
+      "min_ns": 190
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 32,
+      "median_ns": 560,
+      "p99_ns": 610,
+      "min_ns": 530
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 32,
+      "median_ns": 550,
+      "p99_ns": 590,
+      "min_ns": 520
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 32,
+      "median_ns": 150,
+      "p99_ns": 170,
+      "min_ns": 140
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 32,
+      "median_ns": 90,
+      "p99_ns": 110,
+      "min_ns": 80
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 64,
+      "median_ns": 1270143,
+      "p99_ns": 1295073,
+      "min_ns": 1262562
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 64,
+      "median_ns": 90,
+      "p99_ns": 100,
+      "min_ns": 70
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 64,
+      "median_ns": 180,
+      "p99_ns": 300,
+      "min_ns": 180
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 64,
+      "median_ns": 540,
+      "p99_ns": 590,
+      "min_ns": 500
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 64,
+      "median_ns": 530,
+      "p99_ns": 580,
+      "min_ns": 500
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 64,
+      "median_ns": 140,
+      "p99_ns": 160,
+      "min_ns": 130
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 64,
+      "median_ns": 80,
+      "p99_ns": 90,
+      "min_ns": 80
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 128,
+      "median_ns": 1186752,
+      "p99_ns": 1297773,
+      "min_ns": 1177253
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 128,
+      "median_ns": 110,
+      "p99_ns": 120,
+      "min_ns": 90
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 128,
+      "median_ns": 340,
+      "p99_ns": 510,
+      "min_ns": 330
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 128,
+      "median_ns": 540,
+      "p99_ns": 670,
+      "min_ns": 500
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 128,
+      "median_ns": 1030,
+      "p99_ns": 1340,
+      "min_ns": 970
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 128,
+      "median_ns": 150,
+      "p99_ns": 170,
+      "min_ns": 140
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 128,
+      "median_ns": 140,
+      "p99_ns": 160,
+      "min_ns": 130
+    }
+  ],
+  "permutation_breakdown": [
+    {
+      "component": "Pi_A (ARX)",
+      "median_ns": 13430,
+      "throughput_mbps": 145.4300074460164,
+      "percentage_of_cascade": 2.268615570169141
+    },
+    {
+      "component": "Pi_B (GF(2^128))",
+      "median_ns": 98960,
+      "throughput_mbps": 19.736509700889247,
+      "percentage_of_cascade": 16.716470351745212
+    },
+    {
+      "component": "Pi_C (GF(p))",
+      "median_ns": 480591,
+      "throughput_mbps": 4.0640066085299145,
+      "percentage_of_cascade": 81.1821463501979
+    },
+    {
+      "component": "Full Cascade (Pi_Omega)",
+      "median_ns": 591991,
+      "throughput_mbps": 3.2992477926184685,
+      "percentage_of_cascade": 100.0
+    }
+  ],
+  "scalability": [
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 64,
+      "throughput_mbps": 0.05091855575540469
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 64,
+      "throughput_mbps": 678.1684027777778
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 64,
+      "throughput_mbps": 174.38616071428572
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 64,
+      "throughput_mbps": 108.99135044642857
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 64,
+      "throughput_mbps": 110.97301136363636
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 64,
+      "throughput_mbps": 406.9010416666667
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 64,
+      "throughput_mbps": 762.939453125
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 256,
+      "throughput_mbps": 0.20288548475828153
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 256,
+      "throughput_mbps": 1436.121323529412
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 256,
+      "throughput_mbps": 262.5168010752688
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 256,
+      "throughput_mbps": 228.16880841121497
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 256,
+      "throughput_mbps": 116.81369617224881
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 256,
+      "throughput_mbps": 976.5625
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 256,
+      "throughput_mbps": 1061.4809782608695
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 1024,
+      "throughput_mbps": 0.5477744895337736
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 1024,
+      "throughput_mbps": 2034.5052083333335
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 1024,
+      "throughput_mbps": 702.5629496402878
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 1024,
+      "throughput_mbps": 246.60669191919192
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 1024,
+      "throughput_mbps": 133.2281718963165
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 1024,
+      "throughput_mbps": 1085.0694444444446
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 1024,
+      "throughput_mbps": 1220.703125
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 4096,
+      "throughput_mbps": 1.0266294202227795
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 4096,
+      "throughput_mbps": 2206.9209039548023
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 4096,
+      "throughput_mbps": 765.9313725490196
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 4096,
+      "throughput_mbps": 256.31561679790025
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 4096,
+      "throughput_mbps": 140.71505763688762
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 4096,
+      "throughput_mbps": 1112.8917378917379
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 4096,
+      "throughput_mbps": 3685.1415094339623
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 16384,
+      "throughput_mbps": 1.4626646539152888
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 16384,
+      "throughput_mbps": 2307.9763663220087
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 16384,
+      "throughput_mbps": 788.3451059535822
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 16384,
+      "throughput_mbps": 259.6377534064473
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 16384,
+      "throughput_mbps": 140.73913944208752
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 16384,
+      "throughput_mbps": 1119.2693409742121
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 16384,
+      "throughput_mbps": 7891.414141414141
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 65536,
+      "throughput_mbps": 1.500729234349555
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 65536,
+      "throughput_mbps": 2283.5221044939713
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 65536,
+      "throughput_mbps": 480.654613130715
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 65536,
+      "throughput_mbps": 264.69479631206036
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 65536,
+      "throughput_mbps": 140.3923348031475
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 65536,
+      "throughput_mbps": 1101.1275546159268
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 65536,
+      "throughput_mbps": 7851.75879396985
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 262144,
+      "throughput_mbps": 1.578498945117568
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 262144,
+      "throughput_mbps": 2319.7335090144843
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 262144,
+      "throughput_mbps": 808.5120144885353
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 262144,
+      "throughput_mbps": 264.5189141604381
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 262144,
+      "throughput_mbps": 140.8448323749312
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 262144,
+      "throughput_mbps": 1120.6239634228339
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 262144,
+      "throughput_mbps": 8503.401360544218
+    },
+    {
+      "algorithm": "AISE-HASH",
+      "input_bytes": 1048576,
+      "throughput_mbps": 1.5929575677265981
+    },
+    {
+      "algorithm": "SHA-256",
+      "input_bytes": 1048576,
+      "throughput_mbps": 2284.4036906826027
+    },
+    {
+      "algorithm": "SHA-512",
+      "input_bytes": 1048576,
+      "throughput_mbps": 747.0536205206665
+    },
+    {
+      "algorithm": "SHA3-256",
+      "input_bytes": 1048576,
+      "throughput_mbps": 261.8583880311863
+    },
+    {
+      "algorithm": "SHA3-512",
+      "input_bytes": 1048576,
+      "throughput_mbps": 140.09067228673086
+    },
+    {
+      "algorithm": "BLAKE2b",
+      "input_bytes": 1048576,
+      "throughput_mbps": 1121.4886191334929
+    },
+    {
+      "algorithm": "BLAKE3",
+      "input_bytes": 1048576,
+      "throughput_mbps": 8531.695247845748
+    }
+  ]
+}
